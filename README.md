@@ -1,5 +1,5 @@
 # McMail
-##### is een app gemaakt om jouw dagmail te formateren en bij te houden.
+
 
 ## **Install Tutorial**
 >### Android App Download Tutorial:
