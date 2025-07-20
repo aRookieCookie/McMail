@@ -19,6 +19,6 @@
  [] Opmerking niet zichtbaar wanneer je typt
 
 ## Sugesties
- [] De pagina iets lager maken zodat het niet de bovenkant van je telefoon knuffeld
- [] Dagmail Verwijderen
- [x] Wit regel tussen SOC's
+ De pagina iets lager maken zodat het niet de bovenkant van je telefoon knuffeld
+ Dagmail Verwijderen
+ Wit regel tussen SOC's
