@@ -12,3 +12,9 @@
 >### Browser Versie (Compatible met alle devices)
  1. Download de .Html bestand
  2. Open de bestand in een browser
+
+
+### Bug Fixes / Suggesties
+ !Opmerking niet zichtbaar wanneer je typt
+
+ *De pagina iets lager maken zodat het niet de bovenkant van je telefoon knuffeld
