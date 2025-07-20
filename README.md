@@ -17,6 +17,7 @@
 
 ## Bug Fixes
  - Opmerking niet zichtbaar wanneer je typt
+ - Android Actionbar verstopt knoppen
 
 ## Sugesties
  - Dagmail Verwijderen
