@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>McMail - Dagmail Trainer</title>
+<style>
+  :root {
+    --bg-color: #fff8e1;
+    --fg-color: #333333;
+    --primary-color: #c72e1d;
+    --btn-bg: #c72e1d;
+    --btn-fg: #fff;
+    --btn-hover-bg: #a02418;
+    --delbtn-bg: #e04e3d;
+    --delbtn-hover-bg: #b63d2d;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0 1rem 2rem;
+  }
+
+  button {
+    background-color: var(--btn-bg);
+    color: var(--btn-fg);
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0.2rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: var(--btn-hover-bg);
+  }
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .delbtn {
+    background-color: var(--delbtn-bg);
+    font-weight: bold;
+    margin-left: 0.5rem;
+  }
+  .delbtn:hover {
+    background-color: var(--delbtn-hover-bg);
+  }
+
+  #homeBtn, #newDaymailBtn, #settingsBtn, #saveBtn, #copyBtn {
+    font-size: 1rem;
+    min-width: 120px;
+  }
+
+  input, select, textarea {
+    font-size: 1rem;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0.6rem;
+  }
+
+  h2 {
+    font-weight: 700;
+    margin-top: 1.2rem;
+    margin-bottom: 0.4rem;
+    font-size: 1.3rem;
+    color: var(--primary-color);
+  }
+
+  ul {
+    padding-left: 1.2rem;
+  }
+
+  li {
+    margin-bottom: 0.4rem;
+  }
+  li:hover {
+    background: #ffeee6;
+  }
+
+  .section {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  #unsentNotice {
+    background-color: #ffe0e0;
+    color: #a00;
+    border: 1px solid #a00;
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+  }
+
+  /* Custom theme inputs */
+  #customColorsDiv {
+    margin-bottom: 1rem;
+  }
+  #customColorsDiv label {
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="section" id="homeSection">
+  <h1>McMail - Dagmail Trainer</h1>
+  <div>
+    <button id="newDaymailBtn">Nieuwe Dagmail</button>
+    <button id="settingsBtn">Instellingen</button>
+  </div>
+  <h2>Vorige Dagmails</h2>
+  <ul id="daymailsList"></ul>
+</div>
+
+<div class="section hidden" id="editorSection">
+  <button id="backBtn">⬅️ Terug</button>
+  <h2>Dagmail maken/bewerken</h2>
+  <label for="dateInput">Datum</label>
+  <input type="date" id="dateInput" />
+
+  <h2>SOC's toevoegen</h2>
+  <label for="socTypeSelect">Soort SOC</label>
+  <select id="socTypeSelect">
+    <option>Aangekondigd</option>
+    <option>Onaangekondigd</option>
+    <option>Orientatie</option>
+  </select>
+  <label for="socStationSelect">Station</label>
+  <select id="socStationSelect">
+    <option value="">-- Kies station --</option>
+    <option>Algemene Dienst</option>
+    <option>Assembler</option>
+    <option>Basis Voedselveiligheid</option>
+    <option>Batch Cooker Friteuse</option>
+    <option>Batch Cooker Grill</option>
+    <option>Beverage & Desserts</option>
+    <option>Friet</option>
+    <option>Initiator</option>
+    <option>Keuken-sluit</option>
+    <option>Lobby</option>
+    <option>McCafé</option>
+    <option>McCafe-Sluit</option>
+    <option>McDelivery</option>
+    <option>MFY Dressvolgorde</option>
+    <option>MPS Expeditor</option>
+    <option>MPS Runner-Present</option>
+    <option>Ontbijt</option>
+    <option>Order Taker Counter</option>
+    <option>Order taker SBS</option>
+    <option>Raam 1</option>
+    <option>Raam 2</option>
+    <option>Shake Sluit</option>
+    <option>Table Service</option>
+  </select>
+  <label for="traineeInput">Naam Trainee</label>
+  <input type="text" id="traineeInput" placeholder="Naam trainee" />
+  <label for="percentageInput">Percentage (%)</label>
+  <input type="number" id="percentageInput" min="0" max="100" placeholder="Percentage" />
+  <label for="socNoteInput">Opmerking (optioneel)</label>
+  <textarea id="socNoteInput" rows="2" placeholder="Opmerking"></textarea>
+  <button id="addSocBtn">Voeg SOC toe</button>
+
+  <h2>Klusjes toevoegen</h2>
+  <label for="taskDescInput">Klusje</label>
+  <input type="text" id="taskDescInput" placeholder="Omschrijving klusje" />
+  <label for="taskNameInput">Naam Trainee</label>
+  <input type="text" id="taskNameInput" placeholder="Naam trainee" />
+  <button id="addTaskBtn">Voeg klusje toe</button>
+
+  <h2>Toegevoegde SOC's</h2>
+  <ul id="socList"></ul>
+
+  <h2>Toegevoegde Klusjes</h2>
+  <ul id="taskList"></ul>
+
+  <h2>Opmerking</h2>
+  <textarea id="noteInput" rows="3" placeholder="Optionele opmerking"></textarea>
+
+  <div style="margin-top:1rem;">
+    <button id="saveBtn">Opslaan</button>
+    <button id="copyBtn">Kopieer & Export</button>
+  </div>
+
+  <div id="unsentNotice" class="hidden">⚠️ Deze dagmail is opgeslagen maar nog niet gekopieerd/geëxporteerd!</div>
+</div>
+
+<div class="section hidden" id="settingsSection">
+  <button id="backSettingsBtn">⬅️ Terug</button>
+  <h2>Instellingen</h2>
+
+  <label for="themeSelect">Thema</label>
+  <select id="themeSelect">
+    <option value="mcstyle">McStyle (standaard)</option>
+    <option value="light">Licht</option>
+    <option value="dark">Donker</option>
+    <option value="custom">Aangepast</option>
+  </select>
+
+  <div id="customColorsDiv" style="display:none;">
+    <label for="customBgInput">Achtergrondkleur</label>
+    <input type="color" id="customBgInput" value="#ffffff" />
+    <label for="customFgInput">Tekstkleur</label>
+    <input type="color" id="customFgInput" value="#000000" />
+  </div>
+
+  <label for="dateFormatSelect">Datum formaat</label>
+  <select id="dateFormatSelect">
+    <option value="dd-mm-yyyy">dd-mm-jjjj (bv. 20-07-2025)</option>
+    <option value="longnl">Lang (bv. zondag 20 juli 2025)</option>
+    <option value="yyyy-mm-dd">yyyy-mm-dd (bv. 2025-07-20)</option>
+  </select>
+
+  <div style="margin-top: 1rem;">
+    <button id="backupBtn">Backup maken</button>
+    <button id="restoreBtn">Backup terugzetten</button>
+    <input type="file" id="restoreFileInput" accept=".json" style="display:none;" />
+  </div>
+</div>
+
+<script>
+(() => {
+  const homeSection = document.getElementById('homeSection');
+  const editorSection = document.getElementById('editorSection');
+  const settingsSection = document.getElementById('settingsSection');
+
+  // Knoppen
+  const homeBtn = document.getElementById('homeBtn');
+  const newDaymailBtn = document.getElementById('newDaymailBtn');
+  const settingsBtn = document.getElementById('settingsBtn');
+  const backBtn = document.getElementById('backBtn');
+  const backSettingsBtn = document.getElementById('backSettingsBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const addSocBtn = document.getElementById('addSocBtn');
+  const addTaskBtn = document.getElementById('addTaskBtn');
+  const backupBtn = document.getElementById('backupBtn');
+  const restoreBtn = document.getElementById('restoreBtn');
+  const restoreFileInput = document.getElementById('restoreFileInput');
+
+  // Inputs
+  const dateInput = document.getElementById('dateInput');
+  const socTypeSelect = document.getElementById('socTypeSelect');
+  const socStationSelect = document.getElementById('socStationSelect');
+  const traineeInput = document.getElementById('traineeInput');
+  const percentageInput = document.getElementById('percentageInput');
+  const socNoteInput = document.getElementById('socNoteInput');
+
+  const taskDescInput = document.getElementById('taskDescInput');
+  const taskNameInput = document.getElementById('taskNameInput');
+
+  const socListEl = document.getElementById('socList');
+  const taskListEl = document.getElementById('taskList');
+  const noteInput = document.getElementById('noteInput');
+
+  const daymailsList = document.getElementById('daymailsList');
+
+  const unsentNotice = document.getElementById('unsentNotice');
+
+  // Settings inputs
+  const themeSelect = document.getElementById('themeSelect');
+  const customColorsDiv = document.getElementById('customColorsDiv');
+  const customBgInput = document.getElementById('customBgInput');
+  const customFgInput = document.getElementById('customFgInput');
+  const dateFormatSelect = document.getElementById('dateFormatSelect');
+
+  // Data
+  let daymails = JSON.parse(localStorage.getItem('mcmail_daymails') || '[]');
+  let currentDaymailId = null;
+
+  // Helpers
+  function saveDaymails() {
+    localStorage.setItem('mcmail_daymails', JSON.stringify(daymails));
+  }
+
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    if (isNaN(date)) return dateStr;
+    switch (dateFormatSelect.value) {
+      case 'dd-mm-yyyy':
+        return date.toLocaleDateString('nl-NL');
+      case 'longnl':
+        return date.toLocaleDateString('nl-NL', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+      case 'yyyy-mm-dd':
+        return date.toISOString().slice(0,10);
+      default:
+        return date.toLocaleDateString('nl-NL');
+    }
+  }
+
+  function showSection(section) {
+    homeSection.classList.add('hidden');
+    editorSection.classList.add('hidden');
+    settingsSection.classList.add('hidden');
+    section.classList.remove('hidden');
+  }
+
+  // Toon lijst dagmails op homepage
+  function loadDaymailsList() {
+    daymailsList.innerHTML = '';
+    if(daymails.length === 0){
+      daymailsList.innerHTML = '<li>Geen dagmails gevonden</li>';
+      return;
+    }
+    daymails.forEach(dm => {
+      const li = document.createElement('li');
+      li.style.cursor = 'pointer';
+      li.textContent = `${formatDate(dm.date)}${dm.unsent ? ' ⚠️' : ''}`;
+      li.title = 'Klik om te bewerken';
+      li.addEventListener('click', () => openDaymail(dm.id));
+      daymailsList.appendChild(li);
+    });
+  }
+
+  // Maak nieuwe dagmail aan
+  function createNewDaymail(){
+    currentDaymailId = 'id_' + Date.now();
+    dateInput.valueAsDate = new Date();
+    socTypeSelect.value = "Aangekondigd";
+    socStationSelect.value = "";
+    traineeInput.value = "";
+    percentageInput.value = "";
+    socNoteInput.value = "";
+    taskDescInput.value = "";
+    taskNameInput.value = "";
+    noteInput.value = "";
+    socs = [];
+    tasks = [];
+    updateSocList();
+    updateTaskList();
+    unsentNotice.classList.add('hidden');
+    showSection(editorSection);
+  }
+
+  // Open dagmail in editor
+  function openDaymail(id){
+    const dm = daymails.find(d => d.id === id);
+    if(!dm) return alert('Dagmail niet gevonden');
+    currentDaymailId = id;
+    dateInput.value = dm.date;
+    socs = dm.socs || [];
+    tasks = dm.tasks || [];
+    noteInput.value = dm.note || '';
+    updateSocList();
+    updateTaskList();
+    unsentNotice.classList.toggle('hidden', !dm.unsent);
+    showSection(editorSection);
+  }
+
+  // SOCS en klusjes arrays
+  let socs = [];
+  let tasks = [];
+
+  // Update SOC lijst in UI
+  function updateSocList(){
+    socListEl.innerHTML = '';
+    socs.forEach((soc, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = `• <b>**${soc.type} SOC**</b> | ${soc.station} | ${soc.trainee}${soc.percentage ? ' (' + soc.percentage + '%)' : ''}<br>${soc.note ? ' ' + soc.note : ''}`;
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'Verwijder';
+      delBtn.classList.add('delbtn');
+      delBtn.onclick = () => {
+        socs.splice(i,1);
+        updateSocList();
+      };
+      li.appendChild(delBtn);
+      socListEl.appendChild(li);
+    });
+  }
+
+  // Update klusjes lijst in UI
+  function updateTaskList(){
+    taskListEl.innerHTML = '';
+    tasks.forEach((task,i) => {
+      const li = document.createElement('li');
+      li.textContent = `• ${task.desc} | ${task.name}`;
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'Verwijder';
+      delBtn.classList.add('delbtn');
+      delBtn.onclick = () => {
+        tasks.splice(i,1);
+        updateTaskList();
+      };
+      li.appendChild(delBtn);
+      taskListEl.appendChild(li);
+    });
+  }
+
+  // Voeg SOC toe
+  addSocBtn.onclick = () => {
+    const station = socStationSelect.value.trim();
+    const trainee = traineeInput.value.trim();
+    const percentage = percentageInput.value.trim();
+    if(!station) return alert('Kies een station');
+    if(!trainee) return alert('Vul naam trainee in');
+    const newSoc = {
+      type: socTypeSelect.value,
+      station,
+      trainee,
+      percentage: percentage ? Number(percentage) : null,
+      note: socNoteInput.value.trim()
+    };
+    socs.push(newSoc);
+    updateSocList();
+    // reset inputs (behoud type en station)
+    traineeInput.value = '';
+    percentageInput.value = '';
+    socNoteInput.value = '';
+  };
+
+  // Voeg klusje toe
+  addTaskBtn.onclick = () => {
+    const desc = taskDescInput.value.trim();
+    const name = taskNameInput.value.trim();
+    if(!desc) return alert('Vul een klusje in');
+    if(!name) return alert('Vul naam trainee in');
+    tasks.push({desc,name});
+    updateTaskList();
+    taskDescInput.value = '';
+    taskNameInput.value = '';
+  };
+
+  // Opslaan dagmail
+  saveBtn.onclick = () => {
+    if(!dateInput.value) return alert('Vul een datum in');
+    const dm = {
+      id: currentDaymailId,
+      date: dateInput.value,
+      socs,
+      tasks,
+      note: noteInput.value.trim(),
+      unsent: true
+    };
+    const existingIndex = daymails.findIndex(d => d.id === dm.id);
+    if(existingIndex > -1){
+      daymails[existingIndex] = dm;
+    } else {
+      daymails.push(dm);
+    }
+    saveDaymails();
+    alert('Dagmail opgeslagen');
+    unsentNotice.classList.remove('hidden');
+    loadDaymailsList();
+    showSection(homeSection);
+  };
+
+  // Kopieer en export dagmail (maakt ook unsent false)
+  copyBtn.onclick = () => {
+    if(!dateInput.value) return alert('Vul een datum in');
+    let exportText = `Dagmail ${formatDate(dateInput.value)}\n\n`;
+
+    if(socs.length > 0){
+      exportText += `**SOC's**\n`;
+      socs.forEach(soc => {
+        exportText += `• **${soc.type} SOC** | ${soc.station} | ${soc.trainee}`;
+        if(soc.percentage !== null && soc.percentage !== undefined) exportText += `(${soc.percentage}%)`;
+        exportText += `\n`;
+        if(soc.note) exportText += ` ${soc.note}\n`;
+      });
+      exportText += `\n`;
+    }
+
+    if(tasks.length > 0){
+      exportText += `**Klusjes**\n`;
+      tasks.forEach(task => {
+        exportText += `• ${task.desc} | ${task.name}\n`;
+      });
+      exportText += `\n`;
+    }
+
+    if(noteInput.value.trim() !== ''){
+      exportText += `**Opmerking**\n${noteInput.value.trim()}\n`;
+    }
+
+    navigator.clipboard.writeText(exportText).then(() => {
+      alert('Dagmail gekopieerd naar klembord!');
+      // Zet unsent false
+      const idx = daymails.findIndex(d => d.id === currentDaymailId);
+      if(idx > -1){
+        daymails[idx].unsent = false;
+        saveDaymails();
+      }
+      unsentNotice.classList.add('hidden');
+      loadDaymailsList();
+      showSection(homeSection);
+    }, () => {
+      alert('Fout bij kopiëren naar klembord.');
+    });
+  };
+
+  backBtn.onclick = () => {
+    showSection(homeSection);
+  };
+  backSettingsBtn.onclick = () => {
+    showSection(homeSection);
+  };
+  newDaymailBtn.onclick = createNewDaymail;
+  settingsBtn.onclick = () => {
+    showSection(settingsSection);
+  };
+
+  // Thema logica
+  function applyTheme(theme){
+    if(theme === 'mcstyle'){
+      document.documentElement.style.setProperty('--bg-color', '#fff8e1');
+      document.documentElement.style.setProperty('--fg-color', '#333333');
+      document.documentElement.style.setProperty('--primary-color', '#c72e1d');
+      document.documentElement.style.setProperty('--btn-bg', '#c72e1d');
+      document.documentElement.style.setProperty('--btn-fg', '#fff');
+      document.documentElement.style.setProperty('--btn-hover-bg', '#a02418');
+      document.documentElement.style.setProperty('--delbtn-bg', '#e04e3d');
+      document.documentElement.style.setProperty('--delbtn-hover-bg', '#b63d2d');
+      customColorsDiv.style.display = 'none';
+    } else if(theme === 'light'){
+      document.documentElement.style.setProperty('--bg-color', '#fefefe');
+      document.documentElement.style.setProperty('--fg-color', '#222');
+      document.documentElement.style.setProperty('--primary-color', '#005a9c');
+      document.documentElement.style.setProperty('--btn-bg', '#0078d4');
+      document.documentElement.style.setProperty('--btn-fg', '#fff');
+      document.documentElement.style.setProperty('--btn-hover-bg', '#005a9c');
+      document.documentElement.style.setProperty('--delbtn-bg', '#d9534f');
+      document.documentElement.style.setProperty('--delbtn-hover-bg', '#a94442');
+      customColorsDiv.style.display = 'none';
+    } else if(theme === 'dark'){
+      document.documentElement.style.setProperty('--bg-color', '#222');
+      document.documentElement.style.setProperty('--fg-color', '#eee');
+      document.documentElement.style.setProperty('--primary-color', '#ffcc00');
+      document.documentElement.style.setProperty('--btn-bg', '#ffcc00');
+      document.documentElement.style.setProperty('--btn-fg', '#222');
+      document.documentElement.style.setProperty('--btn-hover-bg', '#ccaa00');
+      document.documentElement.style.setProperty('--delbtn-bg', '#ff6666');
+      document.documentElement.style.setProperty('--delbtn-hover-bg', '#cc4444');
+      customColorsDiv.style.display = 'none';
+    } else if(theme === 'custom'){
+      customColorsDiv.style.display = 'block';
+      document.documentElement.style.setProperty('--bg-color', customBgInput.value);
+      document.documentElement.style.setProperty('--fg-color', customFgInput.value);
+      // Voor buttons: contrast (grof)
+      const bg = customBgInput.value;
+      const fg = customFgInput.value;
+      document.documentElement.style.setProperty('--primary-color', fg);
+      document.documentElement.style.setProperty('--btn-bg', fg);
+      document.documentElement.style.setProperty('--btn-fg', bg);
+      document.documentElement.style.setProperty('--btn-hover-bg', fg);
+      document.documentElement.style.setProperty('--delbtn-bg', '#d9534f');
+      document.documentElement.style.setProperty('--delbtn-hover-bg', '#a94442');
+    }
+  }
+
+  themeSelect.onchange = () => {
+    applyTheme(themeSelect.value);
+    saveSettings();
+  };
+
+  customBgInput.onchange = () => {
+    if(themeSelect.value === 'custom'){
+      applyTheme('custom');
+      saveSettings();
+    }
+  };
+  customFgInput.onchange = () => {
+    if(themeSelect.value === 'custom'){
+      applyTheme('custom');
+      saveSettings();
+    }
+  };
+
+  dateFormatSelect.onchange = () => {
+    saveSettings();
+    loadDaymailsList();
+  };
+
+  // Settings opslaan in localStorage
+  function saveSettings(){
+    const settings = {
+      theme: themeSelect.value,
+      customBg: customBgInput.value,
+      customFg: customFgInput.value,
+      dateFormat: dateFormatSelect.value
+    };
+    localStorage.setItem('mcmail_settings', JSON.stringify(settings));
+  }
+  // Settings laden
+  function loadSettings(){
+    const settings = JSON.parse(localStorage.getItem('mcmail_settings') || '{}');
+    if(settings.theme) themeSelect.value = settings.theme;
+    if(settings.customBg) customBgInput.value = settings.customBg;
+    if(settings.customFg) customFgInput.value = settings.customFg;
+    if(settings.dateFormat) dateFormatSelect.value = settings.dateFormat;
+    applyTheme(themeSelect.value);
+  }
+
+  // Backup maken
+  backupBtn.onclick = () => {
+    const dataStr = JSON.stringify({
+      daymails,
+      settings: {
+        theme: themeSelect.value,
+        customBg: customBgInput.value,
+        customFg: customFgInput.value,
+        dateFormat: dateFormatSelect.value
+      }
+    }, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mcmail_backup_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Backup terugzetten
+  restoreBtn.onclick = () => {
+    restoreFileInput.click();
+  };
+
+  restoreFileInput.onchange = e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target.result);
+        if(data.daymails) daymails = data.daymails;
+        if(data.settings){
+          if(data.settings.theme) themeSelect.value = data.settings.theme;
+          if(data.settings.customBg) customBgInput.value = data.settings.customBg;
+          if(data.settings.customFg) customFgInput.value = data.settings.customFg;
+          if(data.settings.dateFormat) dateFormatSelect.value = data.settings.dateFormat;
+          applyTheme(themeSelect.value);
+        }
+        saveDaymails();
+        saveSettings();
+        loadDaymailsList();
+        alert('Backup succesvol teruggezet!');
+      } catch {
+        alert('Fout bij inladen backupbestand.');
+      }
+    };
+    reader.readAsText(file);
+    restoreFileInput.value = '';
+  };
+
+  // Init
+  loadSettings();
+  loadDaymailsList();
+
+})();
+</script>
+
+</body>
+</html>
