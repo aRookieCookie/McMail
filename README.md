@@ -1,4 +1,4 @@
-#McMail
+# McMail
 ---------
 #####is een app gemaakt om jouw dagmail te formateren en bij te houden.
 
