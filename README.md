@@ -14,8 +14,6 @@
  2. Open de bestand in een browser
 
 
-
-
 ### Bug Fixes / Suggesties
  !Opmerking niet zichtbaar wanneer je typt
 
