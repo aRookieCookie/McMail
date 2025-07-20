@@ -18,5 +18,6 @@
 ## Bug Fixes / Suggesties
  !Opmerking niet zichtbaar wanneer je typt
 
- *De pagina iets lager maken zodat het niet de bovenkant van je telefoon knuffeld
- *Dagmail Verwijderen
+ #De pagina iets lager maken zodat het niet de bovenkant van je telefoon knuffeld
+ #Dagmail Verwijderen
+ #Wit regel tussen SOC's
